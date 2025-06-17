@@ -12,16 +12,12 @@ exports.login = async (req, res) => {
     });
 
     if (!user) {
-      req.session.message = "Usuário não encontrado";
-      req.session.type = "danger";
-      return res.redirect('/login');
+      return res.render('login', { message: 'Usuário não encontrado', type: 'danger' });
     }
 
     const senhaValida = await bcrypt.compare(senha, user.senha);
     if (!senhaValida) {
-      req.session.message = "Senha incorreta";
-      req.session.type = "warning";
-      return res.redirect('/login');
+      return res.render('login', { message: 'Senha errada', type: 'warning' });
     }
 
     const token = jwt.sign(
@@ -30,13 +26,10 @@ exports.login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    req.session.token = token;
-    req.session.message = user.role === "admin" ? "Logado como ADM" : "Login realizado com sucesso";
-    req.session.type = "success";
+    const message =
+      user.role === "admin" ? "Logado como ADM" : "Login realizado com sucesso";
 
-    console.log(token);
-
-    return res.redirect('/login');
+    res.render('login', {message: message, type: "success"})
 
   } catch (err) {
     res.status(500).json({ message: "erro ao logar", erro: err });

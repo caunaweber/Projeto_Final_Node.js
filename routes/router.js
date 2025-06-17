@@ -13,13 +13,7 @@ router.delete('/users/:id', authMiddleware.authenticateToken, authMiddleware.aut
 
 router.post('/login', loginController.login);
 router.get('/login', (req, res) => {
-  const message = req.session.message;
-  const type = req.session.type;
-
-  req.session.message = null;
-  req.session.type = null;
-
-  res.render('login', { message, type });
+  res.render('login', { message: null, type: null });
 });
 
 module.exports = router;
