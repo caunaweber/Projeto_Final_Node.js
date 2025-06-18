@@ -4,6 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const loginController = require('../controllers/loginController')
 const authMiddleware = require('../middlewares/authMiddleware');
+const helloWorld = require('../controllers/helloController')
 
 router.post('/users', userController.createUser);
 router.get('/users', authMiddleware.authenticateToken, userController.getAllUser);
@@ -20,5 +21,8 @@ router.get('/cadastro', (req, res) => {
   res.render('cadastro', { message: null });
 });
 router.post('/cadastro', userController.createUser)
+
+router.get('/tokentest', authMiddleware.authenticateToken, helloWorld.helloWorld)
+router.get('/admtest', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, helloWorld.helloWorld)
 
 module.exports = router;

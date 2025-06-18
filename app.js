@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
 const sequelize = require("./config/database");
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

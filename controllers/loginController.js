@@ -26,6 +26,12 @@ exports.login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000 
+    })
+
     const message =
       user.role === "admin" ? "Logado como ADM" : "Login realizado com sucesso";
 
