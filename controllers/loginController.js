@@ -41,3 +41,14 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "erro ao logar", erro: err });
   }
 };
+
+exports.logout = async (req, res) => {
+  const token = req.cookies.token;
+
+  if(!token){
+    return res.status(404).json({message: "Nenhum usuário logado"})
+  }
+
+  res.clearCookie('token');
+  res.redirect('/login')
+}

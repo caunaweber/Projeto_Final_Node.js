@@ -16,6 +16,7 @@ router.post('/login', loginController.login);
 router.get('/login', (req, res) => {
   res.render('login', { message: null, type: null });
 });
+router.get('/logout', loginController.logout)
 
 router.get('/cadastro', (req, res) => {
   res.render('cadastro', { message: null });
