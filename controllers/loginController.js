@@ -29,6 +29,7 @@ exports.login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge: 3600000 
     })
 
@@ -49,6 +50,10 @@ exports.logout = async (req, res) => {
     return res.status(404).json({message: "Nenhum usuário logado"})
   }
 
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  });
   res.redirect('/login')
 }
