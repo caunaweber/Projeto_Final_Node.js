@@ -16,4 +16,9 @@ router.get('/login', (req, res) => {
   res.render('login', { message: null, type: null });
 });
 
+router.get('/cadastro', (req, res) => {
+  res.render('cadastro', { message: null });
+});
+router.post('/cadastro', userController.createUser)
+
 module.exports = router;

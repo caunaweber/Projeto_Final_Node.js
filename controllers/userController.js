@@ -7,18 +7,14 @@ exports.createUser = async (req, res) => {
   try {
 
     if (!usuario || !senha) {
-      return res
-        .status(400)
-        .json({ message: "Usuario e senha nao podem ser nulos" });
+      return res.status(400).render('cadastro', {message: "Usuario e senha nao podem ser nulos", type: 'danger'})
     }
     
     const hashedPassword = await bcrypt.hash(senha, 10);
     const newUser = await User.create({ usuario, senha: hashedPassword });
-    res
-      .status(201)
-      .json({ message: "Usuário criado com sucesso. ", user: newUser });
+    res.status(201).render('login', {message: "Usuário criado com sucesso. ", type: 'success'} )
   } catch (err) {
-    res.status(500).json({ message: "erro ao criar usúario", error: err });
+    res.status(500).render('cadastro', { message: `Erro ao criar usuário ${err}`, type: 'danger'})
   }
 };
 
