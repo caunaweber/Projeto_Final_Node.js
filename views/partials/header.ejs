@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #6c63ff;">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand text-white" href="#">Plataforma de Feedback</a>
+    <div class="ms-auto d-flex align-items-center gap-3">
+      <span class="text-light" id="greeting"></span>
+
+      <script>
+        const userName = "<%= user.usuario %>";
+        const hour = new Date().getHours();
+        let greeting = "Olá";
+
+        if (hour < 12) greeting = "Bom dia";
+        else if (hour < 18) greeting = "Boa tarde";
+        else greeting = "Boa noite";
+
+        document.getElementById('greeting').textContent = `${greeting}, ${userName}!`;
+      </script>
+
+      <% if (user && user.role==='admin' ) { %>
+        <a href="/produtos" class="btn btn-outline-light">Gerenciar Produtos</a>
+        <% } %>
+
+          <a href="/logout" class="btn btn-light text-dark" onclick="return confirm('Deseja realmente sair?')">Logout</a>
+
+    </div>
+  </div>
+</nav>
