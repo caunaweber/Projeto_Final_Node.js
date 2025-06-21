@@ -16,7 +16,7 @@
         document.getElementById('greeting').textContent = `${greeting}, ${userName}!`;
       </script>
 
-      <% if (user && user.role==='admin' ) { %>
+      <% if (user && user.role==='admin' && currentUrl !== '/produtos' ) { %>
         <a href="/produtos" class="btn btn-outline-light">Gerenciar Produtos</a>
         <% } %>
 
