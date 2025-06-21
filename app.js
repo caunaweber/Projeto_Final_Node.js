@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
 
+
 const router = require("./routes/router");
 app.use(router);
 

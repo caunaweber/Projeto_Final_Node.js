@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     res.redirect('dashboard')
 
   } catch (err) {
-    res.status(500).json({ message: "erro ao logar", erro: err });
+    res.status(500).render('login', {message: 'Erro ao logar', type: 'danger'});
   }
 };
 

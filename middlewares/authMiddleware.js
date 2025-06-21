@@ -4,16 +4,17 @@ exports.authenticateToken = (req, res, next) => {
     const token = req.cookies.token;
 
     if(!token){
-        return res.status(401).json({message: "token não fornecido"})
+        return res.status(401).render('login', {message: 'Usuário deslogado', type: 'danger'})
     }
 
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret123");
-        req.user = decoded
-        next();
-    } catch(err){
-        res.status(500).json({message: "Token invalido ou expirado"})
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret123");
+    req.user = decoded;
+    next();
+
+  } catch (err) {
+    return res.status(500).render('login', {message: 'Usuário deslogado', type: 'danger'});
+  }
 }
 
 exports.authorizeAdmin = (req, res, next) => {
