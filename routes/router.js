@@ -8,7 +8,7 @@ const produtoController = require('../controllers/produtoController')
 const helloWorld = require('../controllers/helloController')
 const dashboardController = require('../controllers/dashboardController')
 
-router.get('/', (req, res) => {res.redirect('/login')})
+router.get('/', (req, res) => { res.redirect('/login') })
 
 router.get('/users', authMiddleware.authenticateToken, userController.getAllUser);
 router.get('/users/:id', authMiddleware.authenticateToken, userController.getUserById);
@@ -16,11 +16,11 @@ router.put('/users/:id', authMiddleware.authenticateToken, userController.update
 router.delete('/users/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, userController.deleteUser);
 
 router.post('/login', loginController.login);
-router.get('/login', (req, res) => {res.render('login', { message: null, type: null });});
+router.get('/login', (req, res) => { res.render('login', { message: null, type: null }); });
 
 router.get('/logout', loginController.logout)
 
-router.get('/cadastro', (req, res) => {res.render('cadastro', { message: null });});
+router.get('/cadastro', (req, res) => { res.render('cadastro', { message: null }); });
 router.post('/cadastro', userController.createUser)
 
 router.get('/dashboard', authMiddleware.authenticateToken, dashboardController.renderDashboard);

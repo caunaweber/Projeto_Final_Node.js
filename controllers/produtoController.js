@@ -4,7 +4,7 @@ exports.createProduto = async (req, res) => {
   const { nome, descricao, categoria } = req.body;
   try {
     await Produto.create({ nome, descricao, categoria });
-    
+
     res.redirect('/produtos');
 
   } catch (err) {
@@ -19,13 +19,13 @@ exports.createProduto = async (req, res) => {
 };
 
 exports.updateProduto = async (req, res) => {
-  const {nome, descricao, categoria} = req.body;
+  const { nome, descricao, categoria } = req.body;
   const id = req.params.id;
 
-  try{
+  try {
     const produto = await Produto.findByPk(id)
 
-    if(!produto) res.status(404).json({message: "Produto não encontrado."});
+    if (!produto) res.status(404).json({ message: "Produto não encontrado." });
 
     await produto.update({
       nome: nome,
@@ -33,17 +33,17 @@ exports.updateProduto = async (req, res) => {
       categoria: categoria
     })
 
-    res.status(200).json({message: "Produto atualizado."})
-  } catch(err){
+    res.status(200).json({ message: "Produto atualizado." })
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message: "Erro interno ao atualizar produto.", erro: err})
+    res.status(500).json({ message: "Erro interno ao atualizar produto.", erro: err })
   }
 }
 
 exports.deleteProduto = async (req, res) => {
   const id = req.params.id;
 
-  try{
+  try {
     const produto = await Produto.findByPk(id);
 
     if (!produto) {
@@ -53,18 +53,41 @@ exports.deleteProduto = async (req, res) => {
     await produto.destroy();
     res.status(200).json({ message: 'Produto deletado com sucesso' });
 
-  } catch(err) {
-     console.error('Erro ao deletar produto:', err);
-     res.status(500).json({ message: 'Erro ao deletar produto' });
+  } catch (err) {
+    console.error('Erro ao deletar produto:', err);
+    res.status(500).json({ message: 'Erro ao deletar produto' });
   }
 }
 
 exports.renderProdutos = async (req, res) => {
-  const produtos = await Produto.findAll();
-  res.render('produtos', {
-    user: req.user,
-    produtos,
-    message: null,
-    type: null
-  });
-};
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  try {
+    const { count, rows: produtos } = await Produto.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+
+    const totalPages = Math.ceil(count / limit);
+    res.render('produtos', {
+      user: req.user,
+      produtos,
+      message: null,
+      type: null,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).render('produtos', {
+      user: req.user,
+      produtos: [],
+      message: 'Erro ao carregar produtos',
+      type: 'danger',
+      totalPages: 0,
+      currentPage: page,
+    });
+  }
+}  
