@@ -6,6 +6,7 @@ const loginController = require('../controllers/loginController')
 const authMiddleware = require('../middlewares/authMiddleware');
 const produtoController = require('../controllers/produtoController')
 const helloWorld = require('../controllers/helloController')
+const dashboardController = require('../controllers/dashboardController')
 
 router.get('/', (req, res) => {res.redirect('/login')})
 
@@ -22,7 +23,7 @@ router.get('/logout', loginController.logout)
 router.get('/cadastro', (req, res) => {res.render('cadastro', { message: null });});
 router.post('/cadastro', userController.createUser)
 
-router.get('/dashboard', authMiddleware.authenticateToken, (req, res) => {res.render('dashboard',{user: req.user})})
+router.get('/dashboard', authMiddleware.authenticateToken, dashboardController.renderDashboard);
 
 router.get('/produtos', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.renderProdutos);
 router.post('/produtos', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.createProduto);
