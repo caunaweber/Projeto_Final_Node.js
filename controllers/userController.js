@@ -2,16 +2,16 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 exports.createUser = async (req, res) => {
-  const { usuario, senha } = req.body || {};
+  const { username, senha } = req.body || {};
 
   try {
 
-    if (!usuario || !senha) {
+    if (!username || !senha) {
       return res.status(400).render('cadastro', {message: "Usuario e senha nao podem ser nulos", type: 'danger'})
     }
     
     const hashedPassword = await bcrypt.hash(senha, 10);
-    const newUser = await User.create({ usuario, senha: hashedPassword });
+    const newUser = await User.create({ username, senha: hashedPassword });
     res.status(201).render('login', {message: "Usuário criado com sucesso. ", type: 'success'} )
   } catch (err) {
     res.status(500).render('cadastro', { message: `Erro ao criar usuário ${err}`, type: 'danger'})
@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
 exports.getAllUser = async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: ["id", "usuario", "createdAt"],
+      attributes: ["id", "username", "createdAt"],
     });
     res.status(200).json(users);
   } catch (err) {
@@ -34,7 +34,7 @@ exports.getUserById = async (req, res) => {
 
   try {
     const user = await User.findByPk(id, {
-      attributes: ["id", "usuario", "createdAt", "updatedAt"],
+      attributes: ["id", "username", "createdAt", "updatedAt"],
     });
 
     if (!user) {
@@ -49,7 +49,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { usuario, senha } = req.body;
+  const { username, senha } = req.body;
 
   try {
     const user = await User.findByPk(id);
@@ -61,7 +61,7 @@ exports.updateUser = async (req, res) => {
     const hashedPassword = senha ? await bcrypt.hash(senha, 10) : user.senha;
 
     await user.update({
-      usuario: usuario || user.usuario,
+      username: username || user.username,
       senha: hashedPassword,
     });
 

@@ -3,12 +3,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.login = async (req, res) => {
-  const { usuario, senha } = req.body;
+  const { username, senha } = req.body;
 
   try {
     const user = await User.findOne({
-      where: { usuario },
-      attributes: ["id", "usuario", "senha", "role"],
+      where: { username },
+      attributes: ["id", "username", "senha", "role"],
     });
 
     if (!user) {
@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, usuario: user.usuario, role: user.role },
+      { id: user.id, username: user.username, role: user.role },
       process.env.JWT_SECRET || "secret123",
       { expiresIn: "1h" }
     );
@@ -37,6 +37,7 @@ exports.login = async (req, res) => {
 
   } catch (err) {
     res.status(500).render('login', {message: 'Erro ao logar', type: 'danger'});
+    console.log(err);
   }
 };
 
