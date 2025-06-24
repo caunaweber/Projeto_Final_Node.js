@@ -47,8 +47,6 @@
             padding-top: 30px;
         }
 
-        .product-card {}
-
         .product-card {
             background-color: #fff;
             border-radius: 1rem;
@@ -72,7 +70,6 @@
             font-size: 1.4rem;
             font-weight: 600;
             color: #3f3d56;
-            /* um cinza escuro */
             margin-bottom: 0.8rem;
             text-align: center;
         }
@@ -84,6 +81,7 @@
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
         }
 
@@ -102,6 +100,14 @@
 
         .btn-details:hover {
             background-color: #5a52e0;
+        }
+
+        .modal-body {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         @keyframes fadeInUp {
@@ -141,16 +147,42 @@
 
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <small class="text-muted m-0">Categoria: <%= produto.categoria %></small>
-                                        <a href="/produtos/<%= produto.id %>"
-                                            class="btn btn-purple btn-details">Detalhes</a>
+                                        <button type="button" class="btn btn-purple btn-details"
+                                            data-produto='<%- JSON.stringify(produto).replace(/' /g, "&#39;" ) %>''>
+                                            Detalhes
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
                             <% }) %>
                     </div>
+
         </main>
 
+        <div class="modal fade" id="modalDetalhesProduto" tabindex="-1" aria-labelledby="modalDetalhesProdutoLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalDetalhesProdutoLabel">Detalhes do Produto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 id="produtoNome"></h4>
+                        <p><strong>Descrição:</strong> <span id="produtoDescricao"></span></p>
+                        <p><strong>Categoria:</strong> <span id="produtoCategoria"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <%- include('partials/footer') %>
+            <script src="js/dashboard.js"></script>
 </body>
 
 </html>
