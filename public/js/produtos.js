@@ -1,21 +1,45 @@
 async function excluirProduto(id) {
-  const confirmado = confirm("Deseja realmente excluir?");
-  if (!confirmado) return;
+  const { isConfirmed } = await Swal.fire({
+    title: 'Tem certeza?',
+    text: "Deseja realmente excluir este produto?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#6c63ff',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, excluir',
+    cancelButtonText: 'Cancelar'
+  });
+
+  if (!isConfirmed) return;
 
   try {
-    const respose = await fetch(`/produtos/${id}`, {
+    const response = await fetch(`/produtos/${id}`, {
       method: "DELETE",
     });
 
-    if (respose.ok) {
+    if (response.ok) {
+      await Swal.fire({
+        icon: 'success',
+        title: 'Produto excluído!',
+        showConfirmButton: false,
+        timer: 1500
+      });
       location.reload();
     } else {
-      const dados = await respose.json();
-      alert(dados.message || "Erro ao excluir produto.");
+      const dados = await response.json();
+      await Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: dados.message || 'Erro ao excluir produto.'
+      });
     }
   } catch (err) {
-    alert("Erro ao excluir produto.");
     console.error(err);
+    await Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: 'Erro ao excluir produto.'
+    });
   }
 }
 

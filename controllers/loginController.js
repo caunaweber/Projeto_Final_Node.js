@@ -53,5 +53,5 @@ exports.logout = async (req, res) => {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict'
   });
-  res.redirect('/login')
+  res.redirect('/login?logout=true');
 }
