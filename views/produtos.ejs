@@ -25,18 +25,71 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       padding: 1.2rem;
       display: flex;
+      flex-direction: row;
+      gap: 1.5rem;
+      height: 140px;
+      /* altura fixa para alinhar com a imagem */
+    }
+
+    .product-info {
+      flex-grow: 1;
+      display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      /* espaço entre topo e rodapé */
       height: 100%;
+      min-width: 0;
+      /* importante para permitir quebra de texto */
+    }
+
+    .product-info h5,
+    .product-info p {
+      margin: 0;
+      /* remover margens padrão */
     }
 
     .product-description {
-      max-height: 4.5em;
-      line-height: 1.5em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+      max-height: none;
+      /* libera altura */
+      white-space: normal;
+      /* permite quebra de linha normal */
+      overflow-wrap: break-word;
+      /* quebra palavras longas */
+      word-break: break-word;
+      /* mais compatibilidade */
+      margin: 0;
+      /* pra não criar espaço extra */
+    }
+
+    .product-info small {
+      word-break: break-word;
+      /* permite quebra de linha */
+      white-space: normal;
+      color: #6c757d;
+    }
+
+    .right-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      min-width: 140px;
+      /* garante espaço mínimo */
+    }
+
+    .product-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .btn-group-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
     }
 
     .btn-purple {
@@ -78,30 +131,32 @@
           <div class="row">
             <% produtos.forEach(produto=> { %>
               <div class="col-md-6 mb-4">
-                <div class="product-card h-100 d-flex flex-column justify-content-between">
-                  <div>
+                <div class="product-card h-100">
+                  <div class="product-info">
                     <h5>
                       <%= produto.nome %>
                     </h5>
                     <p class="product-description">
-                      <%= produto.descricao.length> 65 ? produto.descricao.slice(0, 65) + '...'
-                        : produto.descricao %>
+                      <%= produto.descricao.length> 100 ? produto.descricao.slice(0, 100) + '...' : produto.descricao %>
                     </p>
+                    <small>Categoria: <%= produto.categoria %></small>
                   </div>
 
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted m-0">Categoria: <%= produto.categoria %></small>
-                    <div class="d-flex gap-2">
-                      <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                  <div class="right-section">
+                    <img src="/<%= produto.imagem %>" alt="Imagem do produto" class="product-image rounded" />
+
+                    <div class="btn-group-vertical">
+                      <button type="button" class="btn btn-sm btn-warning rounded" data-bs-toggle="modal"
                         data-bs-target="#modalEditar" onclick='preencherModalEditar(<%- JSON.stringify(produto) %>)'>
                         Editar
                       </button>
-                      <button class="btn btn-sm btn-danger"
+                      <button class="btn btn-sm btn-danger rounded"
                         onclick="event.preventDefault(); excluirProduto(<%= produto.id %>)">
                         Excluir
                       </button>
                     </div>
                   </div>
+
                 </div>
               </div>
               <% }) %>
@@ -124,7 +179,7 @@
     <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form method="POST" action="/produtos">
+          <form method="POST" action="/produtos" enctype="multipart/form-data">
             <div class="modal-header">
               <h5 class="modal-title" id="modalCadastroLabel">Cadastrar Novo Produto</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -141,6 +196,10 @@
               <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria</label>
                 <input type="text" class="form-control" name="categoria" required>
+              </div>
+              <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem</label>
+                <input type="file" class="form-control" name="imagem" accept="image/*" />
               </div>
             </div>
             <div class="modal-footer">
@@ -173,6 +232,10 @@
               <div class="mb-3">
                 <label for="edit-categoria" class="form-label">Categoria</label>
                 <input type="text" class="form-control" id="edit-categoria" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-imagem" class="form-label">Imagem</label>
+                <input type="file" class="form-control" id="edit-imagem" name="imagem" accept="image/*" />
               </div>
             </div>
             <div class="modal-footer">

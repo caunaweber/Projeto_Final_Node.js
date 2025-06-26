@@ -1,10 +1,17 @@
 const Produto = require('../models/produto');
+const fs = require('fs');
+const path = require('path');
 
 exports.createProduto = async (req, res) => {
   const { nome, descricao, categoria } = req.body;
   try {
-    await Produto.create({ nome, descricao, categoria });
-
+    
+    if(req.file){
+      let imagem = "uploads/" + req.file.filename;
+      await Produto.create({ nome, descricao, categoria, imagem });
+    }
+    else{await Produto.create({ nome, descricao, categoria });}
+    
     res.redirect('/produtos');
 
   } catch (err) {
@@ -25,12 +32,28 @@ exports.updateProduto = async (req, res) => {
   try {
     const produto = await Produto.findByPk(id)
 
-    if (!produto) res.status(404).json({ message: "Produto não encontrado." });
+    if (!produto) return res.status(404).json({ message: "Produto não encontrado." });
+
+    let imagem = produto.imagem;
+
+    if (req.file) {
+      if (produto.imagem && !produto.imagem.startsWith("imgs/")) {
+        const imagemAntigaPath = path.join(__dirname, "..", "public", produto.imagem);
+        fs.unlink(imagemAntigaPath, (err) => {
+          if (err) {
+            console.error("Erro ao deletar imagem antiga:", err);
+          }
+        });
+      }
+
+      imagem = "uploads/" + req.file.filename;
+    }
 
     await produto.update({
       nome: nome,
       descricao: descricao,
-      categoria: categoria
+      categoria: categoria,
+      imagem: imagem,
     })
 
     res.status(200).json({ message: "Produto atualizado." })
@@ -50,6 +73,15 @@ exports.deleteProduto = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
+    if (produto.imagem && !produto.imagem.startsWith('imgs/')) {
+      const imagemPath = path.join(__dirname, '..', 'public', produto.imagem);
+      fs.unlink(imagemPath, (err) => {
+        if (err) {
+          console.error('Erro ao deletar imagem:', err);
+        }
+      });
+    }
+
     await produto.destroy();
     res.status(200).json({ message: 'Produto deletado com sucesso' });
 
@@ -61,7 +93,7 @@ exports.deleteProduto = async (req, res) => {
 
 exports.renderProdutos = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 10;
+  const limit = 6;
   const offset = (page - 1) * limit;
 
   try {

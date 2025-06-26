@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router();
 
+const upload = require('../config/multer');
+
 const userController = require('../controllers/userController');
 const loginController = require('../controllers/loginController')
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -26,8 +28,8 @@ router.post('/cadastro', userController.createUser)
 router.get('/dashboard', authMiddleware.authenticateToken, dashboardController.renderDashboard);
 
 router.get('/produtos', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.renderProdutos);
-router.post('/produtos', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.createProduto);
-router.put('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.updateProduto);
+router.post('/produtos', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, upload.single("imagem"), produtoController.createProduto);
+router.put('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, upload.single("imagem"), produtoController.updateProduto);
 router.delete('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.deleteProduto)
 
 router.get('/tokentest', authMiddleware.authenticateToken, helloWorld.helloWorld)

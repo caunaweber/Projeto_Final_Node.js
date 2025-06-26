@@ -13,6 +13,11 @@ const Produto = sequelize.define('Produto', {
   categoria: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  imagem: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'imgs/product.png'
   }
 }, {
   tableName: 'produtos',

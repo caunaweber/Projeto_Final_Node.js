@@ -59,14 +59,21 @@ document
     const nome = document.getElementById("edit-nome").value;
     const descricao = document.getElementById("edit-descricao").value;
     const categoria = document.getElementById("edit-categoria").value;
+    const imagemInput = document.getElementById("edit-imagem");
+
+    const formData = new FormData();
+    formData.append("nome", nome);
+    formData.append("descricao", descricao);
+    formData.append("categoria", categoria);
+
+    if (imagemInput.files.length > 0) {
+      formData.append("imagem", imagemInput.files[0]);
+    }
 
     try {
       const response = await fetch(`/produtos/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nome, descricao, categoria }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -76,7 +83,12 @@ document
 
         location.reload();
       } else {
-        const dados = await response.json();
+        let dados;
+        try {
+          dados = await response.json();
+        } catch {
+          throw new Error("Resposta inválida do servidor.");
+        }
         alert(dados.message || "Erro ao editar produto.");
       }
     } catch (err) {
