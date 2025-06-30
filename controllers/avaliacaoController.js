@@ -1,23 +1,100 @@
-const Avaliacao = require('../models/avaliacao');
-const Produto = require('../models/produto');
+const { Avaliacao, User } = require('../models');
 
-exports.createReview = async (req, res) => {
+exports.createAvaliacao = async (req, res) => {
+    const { productId } = req.params;
+    const { avaliacao, comentario } = req.body;
+    const userId = req.user.id;
+
     try {
-        const { nota, comentario, produtoId } = req.body;
-        const userId = req.user.id;
+        const novaAvaliacao = await Avaliacao.create({
+            produtoId: productId,
+            userId: userId, 
+            avaliacao: avaliacao,
+            comentario: comentario
+        });
+        res.status(201).json({
+            message: 'Avaliação criada com sucesso',
+            avaliacao: novaAvaliacao
+        });
+    } catch (error) {
+        console.error('Erro ao criar avaliação:', error);
+        return res.status(500).json({ message: 'Erro ao criar avaliação' });
+    }
+};
 
-        const produto = await Produto.findByPk(produtoId);
+exports.getAvalicaoByProductId = async (req, res) => {
+    const { productId } = req.params;
 
-        const review = await Avaliacao.create({
-            nota,
-            comentario,
-            produto,
-            userId
+    try {
+        const avaliacoes = await Avaliacao.findAll({
+            where: { produtoId: productId },
+            include: [{ model: User, as: 'usuario', attributes: ['username'] }]
+        });
+        res.status(200).json(avaliacoes);
+    } catch (error) {
+        console.error('Erro ao buscar avaliações:', error);
+        return res.status(500).json({ message: 'Erro ao buscar avaliações' });
+    }
+};
+
+exports.getMyAvaliacao = async (req, res) => {
+    const { productId } = req.params;
+    const userId = req.user.id;
+
+    try {
+        const avaliacao = await Avaliacao.findOne({
+            where: { 
+                produtoId: productId, 
+                userId: userId
+            }
         });
 
-        res.status(201).json(review);
+        if (!avaliacao) {
+            return res.status(404).json({ message: 'Nenhuma avaliação sua para este produto.' });
+        }
+        
+        res.status(200).json(avaliacao);
     } catch (error) {
-        console.error('Error creating review:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erro ao buscar sua avaliação:', error);
+        return res.status(500).json({ message: 'Erro ao buscar sua avaliação' });
     }
-}
+};
+
+exports.updateAvaliacao = async (req, res) => {
+    const { id } = req.params;
+    const { avaliacao, comentario } = req.body;
+    const userId = req.user.id;
+    try {
+        const avaliacaoParaAtualizar = await Avaliacao.findOne({ where: { id: id, userId: userId } });
+
+        if (!avaliacaoParaAtualizar) {
+            return res.status(404).json({ message: 'Avaliação não encontrada' });
+        }
+
+        avaliacaoParaAtualizar.avaliacao = avaliacao;
+        avaliacaoParaAtualizar.comentario = comentario;
+        await avaliacaoParaAtualizar.save();
+
+        res.status(200).json({ message: 'Avaliação atualizada com sucesso' });
+    } catch (error) {
+        console.error('Erro ao atualizar avaliação:', error);
+        return res.status(500).json({ message: 'Erro ao atualizar avaliação' });
+    }
+};
+
+exports.deleteAvaliacao = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+    try {
+        const avaliacao = await Avaliacao.findOne({ where: { id: id, userId: userId } });
+
+        if (!avaliacao) {
+            return res.status(404).json({ message: 'Avaliação não encontrada' });
+        }
+        await avaliacao.destroy();
+        res.status(200).json({ message: 'Avaliação deletada com sucesso' });
+    } catch (error) {
+        console.error('Erro ao deletar avaliação:', error);
+        return res.status(500).json({ message: 'Erro ao deletar avaliação' });
+    }
+};

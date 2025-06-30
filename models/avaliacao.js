@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database')
+const sequelize = require('../config/database');
 
 const Avaliacao = sequelize.define('Avaliacao', {
     id: {
@@ -14,6 +14,14 @@ const Avaliacao = sequelize.define('Avaliacao', {
     avaliacao: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    produtoId: {
+        type: DataTypes.INTEGER,
+        field: 'produto_id'
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        field: 'usuario_id'
     }
 }, {
     tableName: 'avaliacoes',
@@ -32,6 +40,6 @@ Avaliacao.associate = (models) => {
         foreignKey: 'userId',
         as: 'usuario'
     });
-}
+};
 
 module.exports = Avaliacao;

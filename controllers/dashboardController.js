@@ -1,4 +1,4 @@
-const Produto = require("../models/produto");
+const { Produto, Avaliacao, sequelize } = require("../models");
 
 exports.renderDashboard = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
@@ -10,9 +10,21 @@ exports.renderDashboard = async (req, res) => {
             limit,
             offset,
             order: [["data_criacao", "DESC"]],
+             attributes: {
+                include: [
+                    [sequelize.fn('AVG', sequelize.col('avaliacoes.avaliacao')), 'mediaAvaliacoes'],
+                ]
+            },
+            include: [{
+                model: Avaliacao,
+                as: 'avaliacoes', 
+                attributes: []
+            }],
+            group: ['Produto.id'],
+            subQuery: false
         });
 
-        const totalPages = Math.ceil(count / limit);
+        const totalPages = Math.ceil(count.lenght / limit);
 
         res.render("dashboard", {
             user: req.user,
@@ -30,7 +42,7 @@ exports.renderDashboard = async (req, res) => {
             produtos: [],
             message: "Erro ao carregar produtos",
             type: "danger",
-            totalPages,
+            totalPages: 0,
             currentPage: page,
         });
     }
