@@ -100,7 +100,7 @@ exports.renderProdutos = async (req, res) => {
     const { count, rows: produtos } = await Produto.findAndCountAll({
       limit,
       offset,
-      order: [["createdAt", "DESC"]],
+      order: [["data_criacao", "DESC"]],
     });
 
     const totalPages = Math.ceil(count / limit);

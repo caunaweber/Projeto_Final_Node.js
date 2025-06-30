@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const User = sequelize.define(
@@ -36,5 +36,12 @@ const User = sequelize.define(
     underscored: true,
   }
 );
+
+User.associate = (models) => {
+    User.hasMany(models.Avaliacao, {
+        foreignKey: 'userId',
+        as: 'avaliacoes'
+    });
+};
 
 module.exports = User;

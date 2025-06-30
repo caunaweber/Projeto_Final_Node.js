@@ -9,7 +9,7 @@ exports.renderDashboard = async (req, res) => {
         const { count, rows: produtos } = await Produto.findAndCountAll({
             limit,
             offset,
-            order: [["createdAt", "DESC"]],
+            order: [["data_criacao", "DESC"]],
         });
 
         const totalPages = Math.ceil(count / limit);
@@ -30,6 +30,8 @@ exports.renderDashboard = async (req, res) => {
             produtos: [],
             message: "Erro ao carregar produtos",
             type: "danger",
+            totalPages,
+            currentPage: page,
         });
     }
 };

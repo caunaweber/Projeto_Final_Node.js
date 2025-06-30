@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const Produto = sequelize.define('Produto', {
@@ -21,6 +21,15 @@ const Produto = sequelize.define('Produto', {
   }
 }, {
   tableName: 'produtos',
+  createdAt: 'data_criacao',
+  updatedAt: false,
 });
+
+Produto.associate = (models) => {
+    Produto.hasMany(models.Avaliacao, {
+        foreignKey: 'produtoId',
+        as: 'avaliacoes'
+    });
+};
 
 module.exports = Produto;
