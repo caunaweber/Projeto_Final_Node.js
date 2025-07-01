@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalDescricao.textContent = button.getAttribute('data-descricao');
         modalCategoria.textContent = button.getAttribute('data-categoria');
         modalImagem.src = button.getAttribute('data-imagem');
-        
+
         const produtoId = button.getAttribute('data-produto-id');
         produtoIdInput.value = produtoId;
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         notaInput.value = '';
         estrelas.forEach(estrela => estrela.className = 'bi bi-star');
         mensagemAvaliacao.innerHTML = '';
-        formAvaliacao.style.display = 'none'; 
+        formAvaliacao.style.display = 'none';
         msgJaAvaliou.style.display = 'none';
     }
 
@@ -67,16 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function carregarOutrasAvaliacoes(produtoId) {
         outrasAvaliacoesContainer.innerHTML = '<p class="text-muted">Carregando avaliações...</p>';
-        fetch(`/review/${produtoId}`, { credentials: 'include' })
+        fetch(`/review/${produtoId}?limit=3`, { credentials: 'include' })
             .then(response => {
                 if (!response.ok) throw new Error('Erro na resposta da rede ao buscar avaliações.');
                 return response.json();
             })
-            .then(avaliacoes => {
+            .then(result => {
+                const totalDeAvaliacoes = result.count;
+                const avaliacoes = result.rows;
+
                 if (avaliacoes && avaliacoes.length > 0) {
                     outrasAvaliacoesContainer.innerHTML = '';
                     avaliacoes.forEach(av => {
-                        const username = av.usuario ? av.usuario.username : 'Usuário anônimo';
+                        const username = av.usuario.username;
                         outrasAvaliacoesContainer.innerHTML += `
                             <div class="mb-3 border-bottom pb-2">
                                 <strong>${username}</strong>
@@ -84,6 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p class="mb-0 text-muted">${av.comentario || ''}</p>
                             </div>`;
                     });
+
+                    if (totalDeAvaliacoes > avaliacoes.length) {
+                  
+                    const verTodasBtn = document.createElement('a');
+                    verTodasBtn.href = `/produtos/${produtoId}/avaliacoes`;
+                    verTodasBtn.textContent = `Ver todas as ${totalDeAvaliacoes} avaliações`;
+                    verTodasBtn.className = 'btn btn-outline-primary btn-sm mt-2';
+                    
+                    outrasAvaliacoesContainer.appendChild(verTodasBtn);
+                }
+
                 } else {
                     outrasAvaliacoesContainer.innerHTML = '<p class="text-muted">Nenhuma avaliação ainda. Seja o primeiro!</p>';
                 }
@@ -122,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mensagemAvaliacao.innerHTML = '<div class="alert alert-danger">Por favor, selecione uma nota de 1 a 5.</div>';
             return;
         }
-        
+
         const rotaDeCriacao = `/review/${produtoId}`;
 
         try {

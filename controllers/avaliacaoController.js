@@ -25,12 +25,16 @@ exports.createAvaliacao = async (req, res) => {
 exports.getAvalicaoByProductId = async (req, res) => {
     const { productId } = req.params;
 
+    const limit = req.query.limit ? parseInt(req.query.limit) : 3;
+
     try {
-        const avaliacoes = await Avaliacao.findAll({
+        const { count, rows: avaliacoes } = await Avaliacao.findAndCountAll({
             where: { produtoId: productId },
-            include: [{ model: User, as: 'usuario', attributes: ['username'] }]
+            include: [{ model: User, as: "usuario", attributes: ['username'] }],
+            limit: limit,
+            order: [['data_criacao', 'DESC']],
         });
-        res.status(200).json(avaliacoes);
+        res.status(200).json({ count, rows: avaliacoes });
     } catch (error) {
         console.error('Erro ao buscar avaliações:', error);
         return res.status(500).json({ message: 'Erro ao buscar avaliações' });
