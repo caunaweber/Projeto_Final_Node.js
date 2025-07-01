@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (totalDeAvaliacoes > avaliacoes.length) {
                   
                     const verTodasBtn = document.createElement('a');
-                    verTodasBtn.href = `/produtos/${produtoId}/avaliacoes`;
+                    verTodasBtn.href = `/produtos/${produtoId}/reviews`;
                     verTodasBtn.textContent = `Ver todas as ${totalDeAvaliacoes} avaliações`;
                     verTodasBtn.className = 'btn btn-outline-primary btn-sm mt-2';
                     

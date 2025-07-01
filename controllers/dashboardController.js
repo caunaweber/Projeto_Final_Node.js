@@ -24,7 +24,7 @@ exports.renderDashboard = async (req, res) => {
             subQuery: false
         });
 
-        const totalPages = Math.ceil(count.lenght / limit);
+        const totalPages = Math.ceil(count.length / limit);
 
         res.render("dashboard", {
             user: req.user,

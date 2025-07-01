@@ -1,4 +1,4 @@
-const { Avaliacao, User } = require('../models');
+const { Produto, Avaliacao, User } = require('../models');
 
 exports.createAvaliacao = async (req, res) => {
     const { productId } = req.params;
@@ -100,5 +100,60 @@ exports.deleteAvaliacao = async (req, res) => {
     } catch (error) {
         console.error('Erro ao deletar avaliação:', error);
         return res.status(500).json({ message: 'Erro ao deletar avaliação' });
+    }
+};
+
+
+exports.renderAvaliacoes = async (req, res) => {
+    const { productId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+
+    try {
+
+        if (!productId) {
+            throw new Error("A variável 'productId' está undefined. Verifique a rota e o link.");
+        }
+
+        const offset = (page - 1) * limit;
+
+        const [produto, { count, rows: avaliacoes }] = await Promise.all([
+            Produto.findByPk(productId),
+            Avaliacao.findAndCountAll({
+                where: { produtoId: productId },
+                include: [{ model: User, as: "usuario", attributes: ['username'] }],
+                order: [['data_criacao', 'DESC']],
+                limit: limit,
+                offset: offset
+            })
+        ]);
+
+        if (!produto) {
+            return res.redirect('/dashboard');
+        }
+
+        const totalPages = Math.ceil(count / limit);
+
+        res.render('avaliacoes', {
+            produto: produto,
+            avaliacoes: avaliacoes,
+            user: req.user,
+            message: null,
+            type: null,
+            totalPages,
+            currentPage: page,
+        });
+
+    } catch (error) {
+        console.error('Erro ao renderizar avaliações:', error);
+        res.status(500).render('avaliacoes', {
+            produto: null,
+            avaliacoes: [],
+            user: req.user,
+            message: 'Erro ao carregar a página de avaliações.',
+            type: 'danger',
+            totalPages: 0,
+            currentPage: page,
+        });
     }
 };

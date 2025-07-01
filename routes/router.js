@@ -36,8 +36,11 @@ router.post('/produtos', authMiddleware.authenticateToken, authMiddleware.author
 router.put('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, upload.single("imagem"), produtoController.updateProduto);
 router.delete('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, produtoController.deleteProduto)
 
+router.get('/produtos/:productId/reviews', authMiddleware.authenticateToken, avaliacaoController.renderAvaliacoes);
+
 router.get('/myReview/:productId', authMiddleware.authenticateToken, avaliacaoController.getMyAvaliacao);
 router.get('/review/:productId', authMiddleware.authenticateToken, avaliacaoController.getAvalicaoByProductId);
 router.post('/review/:productId', authMiddleware.authenticateToken, avaliacaoController.createAvaliacao);
+
 
 module.exports = router;
