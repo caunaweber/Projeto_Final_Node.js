@@ -176,9 +176,9 @@
                 <% } %>
 
                     <div class="row">
-                        <% produtos.forEach(produto=> { %>
+                        <% produtos.forEach((produto,index) => { %>
                             <div class="col-md-6 mb-4">
-                                <div class="product-card h-100">
+                                <div class="product-card h-100 fade-in-item" style="animation-delay: <%= index * 0.1 %>s;">
                                     <div class="product-info">
                                         <h5>
                                             <%= produto.nome %>
