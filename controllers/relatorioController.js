@@ -8,18 +8,8 @@ exports.renderRelatorios = async (req, res) => {
                 order: [['id', 'ASC']]
             }),
             Produto.findAll({
-                order: [['id', 'ASC']],
-                attributes: {
-                    include: [
-                        [sequelize.fn('AVG', sequelize.col('avaliacoes.avaliacao')), 'mediaAvaliacoes']
-                    ]
-                },
-                include: [{
-                    model: Avaliacao,
-                    as: 'avaliacoes',
-                    attributes: []
-                }],
-                group: ['Produto.id']
+                attributes: ['id', 'nome', 'categoria'],
+                order: [['id', 'ASC']]
             })
         ]);
 
