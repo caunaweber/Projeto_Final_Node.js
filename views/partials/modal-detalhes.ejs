@@ -1,0 +1,72 @@
+<div class="modal fade" id="modalDetalhesProduto" tabindex="-1" aria-labelledby="modalDetalhesProdutoLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0">
+
+                    <div class="modal-header bg-purple text-white">
+                        <h5 class="modal-title" id="modalDetalhesProdutoLabel">Detalhes do Produto</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Fechar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-5 text-center mb-3 mb-md-0">
+                                <img id="modalImagemProduto" src="" alt="Imagem do produto"
+                                    class="img-fluid rounded modal-img">
+                            </div>
+                            <div class="col-md-7">
+                                <h4 id="modalNomeProduto" class="mb-3 text-purple"></h4>
+                                <p id="modalDescricaoProduto" class="text-muted mb-3"></p>
+                                <p><strong>Categoria:</strong> <span id="modalCategoriaProduto"
+                                        class="text-secondary"></span></p>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div id="containerFormAvaliacao">
+                            <h5 class="text-purple">Deixe sua avaliação</h5>
+                            <form id="formAvaliacao">
+                                <input type="hidden" id="produtoIdAvaliacao" name="produtoId">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Sua nota:</label>
+                                    <div id="estrelasAvaliacao" class="fs-4" style="cursor: pointer;">
+                                        <i class="bi bi-star" data-valor="1"></i>
+                                        <i class="bi bi-star" data-valor="2"></i>
+                                        <i class="bi bi-star" data-valor="3"></i>
+                                        <i class="bi bi-star" data-valor="4"></i>
+                                        <i class="bi bi-star" data-valor="5"></i>
+                                    </div>
+                                    <input type="hidden" id="notaAvaliacao" name="avaliacao">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="comentarioAvaliacao" class="form-label">Seu comentário:</label>
+                                    <textarea class="form-control" id="comentarioAvaliacao" rows="3"
+                                        placeholder="O que você achou do produto?"></textarea>
+                                </div>
+
+                                <button type="submit" id="btnSalvarAvaliacao" class="btn btn-purple">Enviar
+                                    Avaliação</button>
+
+                                <div id="mensagemAvaliacao" class="mt-3"></div>
+                            </form>
+                        </div>
+
+                        <div id="mensagemJaAvaliou" class="alert alert-info" style="display: none;">
+                            <strong>Obrigado!</strong> Você já avaliou este produto.
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="text-purple">O que outros usuários estão dizendo</h5>
+                        <div id="listaOutrasAvaliacoes">
+                            <p class="text-muted">Carregando avaliações...</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>

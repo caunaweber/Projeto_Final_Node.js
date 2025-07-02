@@ -7,6 +7,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -31,7 +32,7 @@
 
     body {
         background-color: #fbfcff;
-        background-image: 
+        background-image:
             radial-gradient(at 0% 100%, hsla(210, 60%, 85%, 0.2) 0px, transparent 50%),
             radial-gradient(at 90% 10%, hsla(220, 20%, 40%, 0.15) 0px, transparent 50%),
             radial-gradient(at 100% 100%, hsla(240, 20%, 70%, 0.1) 0px, transparent 50%),
@@ -119,9 +120,15 @@
                 </a>
                 <% } %>
 
-                    <a href="#" id="logoutBtn" class="btn nav-btn">
-                        <i class="bi bi-box-arrow-right me-1"></i> Sair
-                    </a>
+                    <% if (user && user.role==='admin' && currentUrl !=='/relatorios' ) { %>
+                        <a href="/relatorios" class="btn nav-btn">
+                            <i class="bi bi-file-earmark-text me-1"></i> Relatórios
+                        </a>
+                        <% } %>
+
+                            <a href="#" id="logoutBtn" class="btn nav-btn">
+                                <i class="bi bi-box-arrow-right me-1"></i> Sair
+                            </a>
         </div>
     </div>
 </nav>

@@ -10,6 +10,7 @@ const produtoController = require('../controllers/produtoController')
 const helloWorld = require('../controllers/helloController')
 const dashboardController = require('../controllers/dashboardController')
 const avaliacaoController = require('../controllers/avaliacaoController')
+const relatorioController = require('../controllers/relatorioController')
 
 router.get('/tokentest', authMiddleware.authenticateToken, helloWorld.helloWorld)
 router.get('/admtest', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, helloWorld.helloWorld)
@@ -42,5 +43,7 @@ router.get('/myReview/:productId', authMiddleware.authenticateToken, avaliacaoCo
 router.get('/review/:productId', authMiddleware.authenticateToken, avaliacaoController.getAvalicaoByProductId);
 router.post('/review/:productId', authMiddleware.authenticateToken, avaliacaoController.createAvaliacao);
 
+router.get('/relatorios', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, relatorioController.renderRelatorios);
+router.get('/relatorios/:tipo/print', authMiddleware.authenticateToken, authMiddleware.authorizeAdmin, relatorioController.printRelatorio);
 
 module.exports = router;

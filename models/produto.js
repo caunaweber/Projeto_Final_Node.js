@@ -28,7 +28,9 @@ const Produto = sequelize.define('Produto', {
 Produto.associate = (models) => {
     Produto.hasMany(models.Avaliacao, {
         foreignKey: 'produtoId',
-        as: 'avaliacoes'
+        as: 'avaliacoes',
+        onDelete: 'CASCADE',
+        hooks: true,
     });
 };
 
