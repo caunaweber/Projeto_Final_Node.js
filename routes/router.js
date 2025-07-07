@@ -18,7 +18,7 @@ const relatorioController = require('../controllers/relatorioController');
  *   get:
  *     summary: Testa token JWT
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Retorna mensagem de sucesso
@@ -31,7 +31,7 @@ router.get('/tokentest', authMiddleware.authenticateToken, helloWorld.helloWorld
  *   get:
  *     summary: Testa token e acesso de administrador
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Acesso concedido para admin
@@ -46,7 +46,7 @@ router.get('/', (req, res) => { res.redirect('/login') });
  *   get:
  *     summary: Retorna todos os usuários
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Lista de usuários
@@ -64,7 +64,7 @@ router.get('/users', authMiddleware.authenticateToken, userController.getAllUser
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Usuário encontrado
@@ -82,7 +82,7 @@ router.get('/users/:id', authMiddleware.authenticateToken, userController.getUse
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Usuário atualizado
@@ -100,7 +100,7 @@ router.put('/users/:id', authMiddleware.authenticateToken, userController.update
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Usuário deletado
@@ -166,7 +166,7 @@ router.post('/cadastro', userController.createUser);
  *   get:
  *     summary: Exibe a dashboard
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Renderiza a dashboard
@@ -179,7 +179,7 @@ router.get('/dashboard', authMiddleware.authenticateToken, dashboardController.r
  *   get:
  *     summary: Renderiza produtos (admin)
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Lista de produtos
@@ -192,7 +192,7 @@ router.get('/produtos', authMiddleware.authenticateToken, authMiddleware.authori
  *   post:
  *     summary: Cadastra produto (admin)
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     consumes:
  *       - multipart/form-data
  *     requestBody:
@@ -223,7 +223,7 @@ router.post('/produtos', authMiddleware.authenticateToken, authMiddleware.author
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -252,7 +252,7 @@ router.put('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.aut
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Produto deletado
@@ -270,7 +270,7 @@ router.delete('/produtos/:id', authMiddleware.authenticateToken, authMiddleware.
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Lista de avaliações
@@ -288,7 +288,7 @@ router.get('/produtos/:productId/reviews', authMiddleware.authenticateToken, ava
  *         required: true
  *         schema: { type: integer }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Avaliação do usuário
@@ -317,7 +317,7 @@ router.get('/myReview/:productId', authMiddleware.authenticateToken, avaliacaoCo
  *               nota: { type: integer }
  *               comentario: { type: string }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       201:
  *         description: Avaliação criada com sucesso
@@ -331,7 +331,7 @@ router.post('/review/:productId', authMiddleware.authenticateToken, avaliacaoCon
  *   get:
  *     summary: Exibe opções de relatórios (admin)
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Página de relatórios
@@ -349,7 +349,7 @@ router.get('/relatorios', authMiddleware.authenticateToken, authMiddleware.autho
  *         required: true
  *         schema: { type: string }
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Relatório gerado

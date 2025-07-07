@@ -21,10 +21,10 @@ const swaggerOptions = {
         components: {
             // 👇 ADICIONADO: Define como a autenticação funciona
             securitySchemes: {
-                bearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT' // Opcional, apenas para indicar que é JWT
+                cookieAuth: {
+                    type: 'apiKey',
+                    in: 'cookie',
+                    name: 'token'
                 }
             },
             // Seus schemas reutilizáveis
@@ -59,12 +59,7 @@ const swaggerOptions = {
                     }
                 }
             }
-        },
-        security: [
-            {
-                bearerAuth: []
-            }
-        ]
+        }
     },
     apis: ['./routes/router.js']
 };
